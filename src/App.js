@@ -11,6 +11,7 @@ function App() {
   let myJson = [];
   let myxlsJson = [];
   let csvArray = [];
+  let csvArrayTemp = [];
 
   function myExport(data,dataxls){
     let myxlsJsonTemp = dataxls.split("\n");
@@ -23,8 +24,15 @@ function App() {
       console.log(Object.keys(myJson).length);
       for (let i = 0; i < Object.keys(myJson).length; i++) {
         for (let j = 0; j < myxlsJson.length; j++) {
-          if (myJson[i]['$']['id'] === myxlsJson[j][0]) {
-            csvArray.push(myJson[i]['$']['name'] + "," + myJson[i]['$']['id'] + "," + myxlsJson[j][2]);
+          if (myJson[i]['$']['id'] === myxlsJson[j][0] && csvArrayTemp.includes(myJson[i]['$']['id']) === false && myxlsJson[j][2] != 6
+          && myxlsJson[j][2] != 7
+          && myxlsJson[j][2] != 15
+          && myxlsJson[j][2] != 16
+          && myxlsJson[j][2] != 20
+          && myxlsJson[j][2] != 24
+          && myxlsJson[j][2] != 25) {
+            csvArrayTemp.push(myJson[i]['$']['id']);
+            csvArray.push(myJson[i]['$']['name'] + "," + myJson[i]['$']['id'] + "," + myxlsJson[j][2] + ",," + myJson[i]['$']['x'] + " " + myJson[i]['$']['y']);
           }
         }
         console.log(myJson[i]);
@@ -32,7 +40,7 @@ function App() {
       console.log(csvArray);
     });
     let myCSV = 
-        "Name,NPC ID,NPC Level\n"+
+        "Name,NPC ID,NPC Level,NPC Location\n"+
           flatMapDeep (csvArray.map((item) => {
             const line = `${item}`;
             return [line];
